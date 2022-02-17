@@ -29,21 +29,22 @@ using namespace std;
 
 PhononPrimaryGeneratorAction::PhononPrimaryGeneratorAction() {
   G4int n_particle = 1;
-  fParticleGun  = new G4ParticleGun(n_particle);
-  //G4ParticleTable *particleTable = G4ParticleTable::GetParticleTable();
-  //G4String particleName="muon";
-  //G4ParticleDefinition *particle = particleTable->FindParticle("muonmnus");
-  //fParticleGun->SetParticlePosition(pos);
-  //fParticleGun->SetParticleMomentumDirection(mom);
-  //
+  fParticleGun = new G4ParticleGun(1);
+
+
+    //fParticleGun->GeneratePrimaryVertex(G4Event);
+
   //fParticleGun->SetParticleDefinition(proton::Definition());
   // default particle kinematics ("geantino" triggers random phonon choice)
 //  fParticleGun->SetParticleDefinition(G4Geantino::Definition());
   //fParticleGun->SetParticleMomentumDirection(G4RandomDirection());
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.0,0.0,1.0));
 
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.0*cm,0.*cm,0.035*cm));
-  fParticleGun->SetParticleEnergy(10*eV);// The initial energy
+  fParticleGun->SetParticleMomentumDirection(G4RandomDirection());
+fParticleGun->SetParticlePosition(G4ThreeVector(1.0*cm,0.*cm,0.0*cm));
+ fParticleGun->SetParticleEnergy(100*eV);// The initial energy
+
+
+
   //fParticleGun->SetParticleMomentum(100.*GeV);
   //fParticleGun->SetParticleMomentumDirection(G4RandomDirection());
   //fParticleGun->SetParticlePosition(G4ThreeVector(0.0,0.0,0.0));
@@ -61,31 +62,61 @@ PhononPrimaryGeneratorAction::~PhononPrimaryGeneratorAction() {
 
 
 void PhononPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
-  fParticleGun->SetParticleDefinition(G4CMPDriftElectron::Definition());
-  fParticleGun->GeneratePrimaryVertex(anEvent);
 
+  //G4ParticleTable *particleTable = G4ParticleTable::GetParticleTable();
+  //G4String particleName="muon";
+  //G4ParticleDefinition *particle = particleTable->FindParticle("muonmnus");
+  //fParticleGun->SetParticlePosition(pos);
+  //fParticleGun->SetParticleMomentumDirection(mom);
+  //
+
+
+
+
+
+
+  //fParticleGun->SetParticleDefinition(G4CMPDriftElectron::Definition());
+//  fParticleGun->GeneratePrimaryVertex(anEvent);
+//fParticleGun->SetParticleDefinition(G4CMPDriftHole::Definition());
+//fParticleGun->GeneratePrimaryVertex(anEvent);
   //fParticleGun->GetParticleDefinition() ==G4Proton::Definition();
   //fParticleGun->SetParticleDefinition(G4Proton::Definition());
   //fParticleGun->GeneratePrimaryVertex(anEvent);
 
-if (fParticleGun->GetParticleDefinition() == G4Geantino::Definition()) {
+// if (fParticleGun->GetParticleDefinition() == G4Geantino::Definition()) {
+//     fParticleGun->SetParticleDefinition(G4CMPDriftElectron::Definition());
+//     fParticleGun->GeneratePrimaryVertex(anEvent);
+//     fParticleGun->SetParticleDefinition(G4CMPDriftHole::Definition());
+//       fParticleGun->GeneratePrimaryVertex(anEvent);
+//
+//   //   G4double selector = G4UniformRand();
+//   // if (selector<0.53539) {
+//   //     fParticleGun->SetParticleDefinition(G4PhononTransSlow::Definition());
+//   //   } else if (selector<0.90217) {
+//   //     fParticleGun->SetParticleDefinition(G4PhononTransFast::Definition());
+//   //   } else {
+//   //     fParticleGun->SetParticleDefinition(G4PhononLong::Definition());
+//   //   }
+//   }
+
+  //fParticleGun->SetParticleMomentumDirection(G4RandomDirection());
+  //fParticleGun->GeneratePrimaryVertex(anEvent);
+
+  // If user did not set particle explicitly, do e/h pairs
+  if (fParticleGun->GetParticleDefinition() == G4Geantino::Definition()) {
+    fParticleGun->SetParticleDefinition(G4CMPDriftHole::Definition());
+    fParticleGun->GeneratePrimaryVertex(anEvent);
     fParticleGun->SetParticleDefinition(G4CMPDriftElectron::Definition());
     fParticleGun->GeneratePrimaryVertex(anEvent);
-    fParticleGun->SetParticleDefinition(G4CMPDriftHole::Definition());
-      fParticleGun->GeneratePrimaryVertex(anEvent);
 
-    G4double selector = G4UniformRand();
-  if (selector<0.53539) {
-      fParticleGun->SetParticleDefinition(G4PhononTransSlow::Definition());
-    } else if (selector<0.90217) {
-      fParticleGun->SetParticleDefinition(G4PhononTransFast::Definition());
-    } else {
-      fParticleGun->SetParticleDefinition(G4PhononLong::Definition());
-    }
+    // Restore "not set" condition for next event
+  fParticleGun->SetParticleDefinition(G4Geantino::Definition());
+  } else {
+    fParticleGun->GeneratePrimaryVertex(anEvent);
   }
 
-  fParticleGun->SetParticleMomentumDirection(G4RandomDirection());
-  fParticleGun->GeneratePrimaryVertex(anEvent);
+
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
