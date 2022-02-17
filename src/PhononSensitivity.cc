@@ -115,13 +115,13 @@ G4bool PhononSensitivity::IsHit(const G4Step* step,
 
   G4bool correctParticle = particle == G4PhononLong::Definition() ||
                            particle == G4PhononTransFast::Definition() ||
+                            particle == G4CMPDriftElectron::Definition() ||
                            particle == G4PhononTransSlow::Definition() ||
-                           particle == G4CMPDriftHole::Definition() ||
-                           particle == G4CMPDriftElectron::Definition();
+                           particle == G4CMPDriftHole::Definition();
 
   G4bool correctStatus = step->GetTrack()->GetTrackStatus() == fStopAndKill &&
-                         postStepPoint->GetStepStatus() == fGeomBoundary &&
-                         step->GetNonIonizingEnergyDeposit() > 0.;
+                         postStepPoint->GetStepStatus() == fGeomBoundary ;//&&
+                        // step->GetNonIonizingEnergyDeposit() > 0.;
 
   return correctParticle && correctStatus;
 }
