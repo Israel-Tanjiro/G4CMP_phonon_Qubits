@@ -134,14 +134,14 @@ void PhononDetectorConstruction::SetupGeometry()
 
 
   G4double Gap= 0.015*cm;
-//  G4VSolid *fGap = new G4Tubs("FGap",0.*cm,0.001*cm+Gap,0.0011*cm,0.*deg, 360.*deg);
-  //G4VSolid *fboundary = new G4Box("Fboundary",0.625*cm,0.625*cm,0.001*cm);
+G4VSolid *fGap = new G4Tubs("FGap",0.*cm,0.07*cm+Gap,0.012*cm,0.*deg, 360.*deg);
+G4VSolid *fboundary = new G4Box("Fboundary",6.25*cm,6.25*cm,0.01*cm);
   G4ThreeVector T(0.*cm,0.,0.);
   // New Geometry Nb ground plane circles.
-   G4VSolid* fNiobiumSolid = new G4Tubs("fNiobiumSolid ",0.075*cm,0.081*cm,0.01*cm, 0.*deg, 360.*deg);//
-  //G4VSolid *fNiobiumSolid = new G4SubtractionSolid("Fboundary-FGap",fboundary,fGap,0,T);// This must be 100 microns
+  // G4VSolid* fNiobiumSolid = new G4Tubs("fNiobiumSolid ",0.075*cm,0.081*cm,0.01*cm, 0.*deg, 360.*deg);//
+  G4VSolid *fNiobiumSolid = new G4SubtractionSolid("Fboundary-FGap",fboundary,fGap,0,T);// This must be 100 microns
   G4LogicalVolume *logicfNiobiumSolid = new G4LogicalVolume(fNiobiumSolid,fNiobium,"logicfNiobiumSolid ");
-  G4VPhysicalVolume *physfNiobium = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.076*cm),logicfNiobiumSolid,"physfNiobium",  worldLogical,false,0 );
+  G4VPhysicalVolume *physfNiobium = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.046*cm),logicfNiobiumSolid,"physfNiobium",  worldLogical,false,0 );
 
 
 
@@ -207,7 +207,7 @@ void PhononDetectorConstruction::SetupGeometry()
   if (!electrodeSensitivity)
     electrodeSensitivity = new PhononSensitivity("PhononElectrode");
       //sensitivity = new ChargeElectrodeSensitivity("ChargeElectrode");
-  SDman->AddNewDetector(electrodeSensitivity);
+SDman->AddNewDetector(electrodeSensitivity);
 fSiliconLogical->SetSensitiveDetector(electrodeSensitivity);
 //fSiliconLogical->SetSensitiveDetector(electrodeSensitivity);
 
@@ -222,13 +222,13 @@ fSiliconLogical->SetSensitiveDetector(electrodeSensitivity);
 
   if (!fConstructed) {
     topSurfProp =new G4CMPSurfaceProperty("TopAlSurf", 1.0, 0.0, 0., 0.,
-    1.0, 0.0, 0., 0.);
+    0.6, 0.4, 0., 0.);
     // botSurfProp = new G4CMPSurfaceProperty("BotAlSurf", 1., 1., 0., 0.,
     // 0.22, 1., 0., 0.);
-   topSurfPropNb = new G4CMPSurfaceProperty("BotNbSurf", 1.0, 1.0, 0.0, 0.0, 0.33, 1.0, 0.0, 0.0);
+   topSurfPropNb = new G4CMPSurfaceProperty("BotNbSurf", 0.0, 1.0, 0.0, 0.0, 0.56, 0.44, 0.0, 0.0);
 
-    wallSurfProp = new G4CMPSurfaceProperty("WallAlSurf", 1.0, 0.0, 0.0, 0.0,
-                                                          1.0, 0.0, 0.0, 0.0);
+    wallSurfProp = new G4CMPSurfaceProperty("WallAlSurf", 0.0, 1.0, 0.0, 0.0,
+                                                          0.0, 1.0, 0.0, 0.0);
   }
 
   new G4LogicalBorderSurface("iZIPTop", SiPhys, aluminumTopPhysical,
