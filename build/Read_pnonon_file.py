@@ -19,6 +19,7 @@ with open('phonon_hits.txt') as csv_file:
 
 
     x=[]
+    y=[]
     names=[]
     Energy_Initial_e=[]
     i=0
@@ -26,15 +27,18 @@ with open('phonon_hits.txt') as csv_file:
 
     for lines in csv_reader:
         #print(lines[9])
-        #i=1+i
+        i=1+i
         #print(i)
-        Energy_Initial_e.append(lines[4])
-        x.append(lines[9])
+        #Energy_Initial_e.append(float(lines[4]))
+        x.append(float(lines[11])*100)
+        y.append(float(lines[12])*100)
         names.append(lines[3])
-        z.append(lines[13])
-print("List of column names : ",list_of_column_names[0][13])
+        z.append(float(lines[13])*100)#Converting to cm from meter
+print("List of column names : ",list_of_column_names[0][11])
+2617899
+
 #print(x)
-#Print the names of the lists
+#Print the names of the LogicalSurfacests
 #x.remove('Energy_Deposited')
 #print(x)
 list_of_floatsF = [] # The only tryef
@@ -49,41 +53,48 @@ B="phononTS"
 C="phononL"
 D='G4CMPDriftElectron'
 E='G4CMPDriftHole'
-
+import numpy as geek
 i=0
 #Counting the number of photons
 Ts=0
 L=0
 Tf=0
 Elec=0
-for item in x:
-
-    if names[i]==A:
-        #print(names[i])
-        Tf=Tf+1
-        list_of_floatsF.append(float(item))
-    if names[i]==B:
-        #print(names[i])
-        Ts=Ts+1
-        list_of_floatsS.append(float(item))
-    if names[i]==C:
-        #print(names[i])
-        L=L+1
-        list_of_floatsL.append(float(item))
-    if names[i]==D:
-        Elec=Elec+1
-    i=i+1
-        #list_of_floatsE.append(float(item))
-
-
 i=0
-for item  in Energy_Initial_e:
-    if names[i]==D:
-        list_of_floatsE.append(float(item))
-    i=i+1
+j=0
+Hole=0
+print(x[0])
+for i in range(len(x)):
+    if x[i]<0.007 and x[i]>-0.007 :
+        if z[i]>0:
+            if y[i]<0.007 and y[i]>-0.007:
+                if names[i]==A:
+                    Tf=Tf+1
+                if names[i]==B:
+                    Ts=Ts+1
 
-for item in z:
-    list_of_floatsZ.append(float(item))
+                if names[i]==C:
+                    L=L+1
+
+
+                if names[i]==D:
+                    Elec=Elec+1
+
+                if names[i]==E:
+                    Hole=Hole+1
+
+
+
+print(j)
+print(len(x))
+
+
+
+
+
+
+
+
 
 
 #print(list_of_floats)
@@ -94,14 +105,15 @@ print("The number of phononTS is",Ts)
 print("The number of phononTF is",Tf)
 print("The number of phononL is",L)
 print("G4CMPDriftElectron",Elec)
+print("G4CMPDriftHole",Hole)
+# #
+# a = np.hstack(list_of_floatsZ)
+# _ = plt.hist(a, bins='auto', color = "green")
+# plt.xlabel('Start Energ [eV]');
+# plt.show()
 #
-a = np.hstack(list_of_floatsE)
-_ = plt.hist(a, bins='auto', color = "green")
-plt.xlabel('Start Energ [eV]');
-plt.show()
-
-mean = sum(list_of_floatsE) / len(list_of_floatsE)
-print("The mean Energy is ",mean)
+# mean = sum(list_of_floatsE) / len(list_of_floatsE)
+# print("The mean Energy is ",mean)
 
 #Saving on a File all the Simulations The numbers of phonon as a function of the Distance and the Mean Energy of the Electrons as the number of electrons
 
@@ -116,6 +128,6 @@ print("The mean Energy is ",mean)
 # plt.show()
 
 
-z = np.hstack(list_of_floatsZ,)
-_ = plt.hist(z, bins='auto')
-plt.show()
+# z = np.hstack(list_of_floatsZ,)
+# _ = plt.hist(z, bins='auto')
+# plt.show()
