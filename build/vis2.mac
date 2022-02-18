@@ -1,0 +1,4 @@
+/run/initialize
+/gun/position 0.1 0 0.0108 cm
+/gun/number 1
+/run/beamOn 1
