@@ -1,7 +1,13 @@
 import csv
-name ="Phonons_impacts_1.txt"
+name ="phonons_impacts.txt"
+Radial_posTS="Position_detector_TS.txt"
+Radial_posTF="Position_detector_TF.txt"
+Radial_posTL="Position_detector_TL.txt"
+Radial_posE="Position_detector_E.txt"
+Radial_posH="Position_detector_H.txt"
 b_file=open(name,"a")
-names="phonon_hits_0_0_0.txt"
+
+names="phonon_hits.txt"
 with open(names) as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     line_count = 0
@@ -59,7 +65,7 @@ B="phononTS"
 C="phononL"
 D='G4CMPDriftElectron'
 E='G4CMPDriftHole'
-import numpy as geek
+#import numpy as geek
 i=0
 #Counting the number of photons
 Ts=0
@@ -69,6 +75,17 @@ Elec=0
 i=0
 j=0
 Hole=0
+#Position Distribution of the Electrones and Holes
+xL=[]
+yL=[]
+xTF=[]
+yTF=[]
+xTS=[]
+yTS=[]
+xe=[]
+ye=[]
+xH=[]
+yH=[]
 print(x[0])
 for i in range(len(x)):
     if x[i]<0.007 and x[i]>-0.007 :
@@ -77,22 +94,32 @@ for i in range(len(x)):
                 if names[i]==A:
                     Tf=Tf+1
                     ETF.append(Energy_Deposited[i])
+                    xTF.append(x[i])
+                    yTF.append(y[i])
                 if names[i]==B:
                     Ts=Ts+1
                     ETS.append(Energy_Deposited[i])
+                    xTS.append(x[i])
+                    yTS.append(y[i])
 
                 if names[i]==C:
                     L=L+1
                     EL.append(Energy_Deposited[i])
+                    xL.append(x[i])
+                    yL.append(y[i])
 
 
                 if names[i]==D:
                     Elec=Elec+1
                     Ee.append(Energy_Deposited[i])
+                    xe.append(x[i])
+                    ye.append(y[i])
 
                 if names[i]==E:
                     Hole=Hole+1
                     EH.append(Energy_Deposited[i])
+                    xH.append(x[i])
+                    yH.append(y[i])
 
 
 
@@ -101,8 +128,8 @@ for i in range(len(x)):
 
 #
 
-import matplotlib.pyplot as plt
-import numpy as np
+#import matplotlib.pyplot as plt
+#import numpy as np
 
 
 
@@ -167,3 +194,30 @@ b_file.write("\t" +str(meanH))
 b_file.write("\n")
 
 b_file.close()
+
+zip(xTS,yTS)
+zip(xTF,yTF)
+zip(xL,yL)
+zip(xe,ye)
+zip(xH,yH)
+
+import csv
+with open(Radial_posTS, 'a') as f:
+     writer = csv.writer(f, delimiter='\t')
+     writer.writerows(zip(xTS,yTS))
+
+with open(Radial_posTF, 'a') as f:
+     writer = csv.writer(f, delimiter='\t')
+     writer.writerows(zip(xTF,yTF))
+
+with open(Radial_posTL, 'a') as f:
+     writer = csv.writer(f, delimiter='\t')
+     writer.writerows(zip(xL,yL))
+
+with open(Radial_posE, 'a') as f:
+     writer = csv.writer(f, delimiter='\t')
+     writer.writerows(zip(xe,ye))
+
+with open(Radial_posH, 'a') as f:
+     writer = csv.writer(f, delimiter='\t')
+     writer.writerows(zip(xH,yH))
