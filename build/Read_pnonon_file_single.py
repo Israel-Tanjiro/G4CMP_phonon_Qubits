@@ -5,9 +5,15 @@ Radial_posTF="Position_detector_TF.txt"
 Radial_posTL="Position_detector_TL.txt"
 Radial_posE="Position_detector_E.txt"
 Radial_posH="Position_detector_H.txt"
+Energy_Analysis="Energy_Analysis.txt"
+Radial_posTS_Nb="Position_detector_TS_Nb.txt"
+Radial_posTF_Nb="Position_detector_TF_Nb.txt"
+Radial_posTL_Nb="Position_detector_TL_Nb.txt"
+Radial_posE_Nb="Position_detector_E_Nb.txt"
+Radial_posH_Nb="Position_detector_H_Nb.txt"
 b_file=open(name,"a")
 
-names="phonon_hits.txt"
+names="phonon_hits_0_0_0.txt"
 with open(names) as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     line_count = 0
@@ -40,7 +46,7 @@ with open(names) as csv_file:
         #print(i)
         #Energy_Initial_e.append(float(lines[4]))
 
-        Start_Energy.append(float(lines[4])*100)
+        Start_Energy.append(float(lines[4]))
         Energy_Deposited.append(float(lines[9]))
         x.append(float(lines[11])*100)
         y.append(float(lines[12])*100)
@@ -58,6 +64,13 @@ ETS = []
 EL = []
 Ee = []
 EH = []
+##
+ETF_Nb = [] # The only tryef
+ETS_Nb = []
+EL_Nb = []
+Ee_Nb = []
+EH_Nb = []
+
 #Adding only the transverse photon
 A="phononTF"
 
@@ -75,6 +88,12 @@ Elec=0
 i=0
 j=0
 Hole=0
+#Counting the number of phonon in the Nb
+Ts_Nb=0
+L_Nb=0
+Tf_Nb=0
+Elec_Nb=0
+Hole_Nb=0
 #Position Distribution of the Electrones and Holes
 xL=[]
 yL=[]
@@ -86,6 +105,20 @@ xe=[]
 ye=[]
 xH=[]
 yH=[]
+
+#Position Distribution of the Electrons and Holes in the Nb Region
+xL_Nb=[]
+yL_Nb=[]
+xTF_Nb=[]
+yTF_Nb=[]
+xTS_Nb=[]
+yTS_Nb=[]
+xe_Nb=[]
+ye_Nb=[]
+xH_Nb=[]
+yH_Nb=[]
+
+
 print(x[0])
 for i in range(len(x)):
     if x[i]<0.007 and x[i]>-0.007 :
@@ -120,6 +153,41 @@ for i in range(len(x)):
                     EH.append(Energy_Deposited[i])
                     xH.append(x[i])
                     yH.append(y[i])
+i=0
+j=0
+for i in range(len(x)):
+    if x[i]>0.0 or x[i]<-0.0000001:
+        if z[i]>0:
+            if y[i]>0.0 or y[i]<-0.0000001 :
+                if names[i]==A:
+                    Tf_Nb=Tf_Nb+1
+                    ETF_Nb.append(Energy_Deposited[i])
+                    xTF_Nb.append(x[i])
+                    yTF_Nb.append(y[i])
+                if names[i]==B:
+                    Ts_Nb=Ts_Nb+1
+                    ETS_Nb.append(Energy_Deposited[i])
+                    xTS_Nb.append(x[i])
+                    yTS_Nb.append(y[i])
+
+                if names[i]==C:
+                    L_Nb=L_Nb+1
+                    EL_Nb.append(Energy_Deposited[i])
+                    xL_Nb.append(x[i])
+                    yL_Nb.append(y[i])
+
+
+                if names[i]==D:
+                    Elec_Nb=Elec_Nb+1
+                    EL_Nb.append(Energy_Deposited[i])
+                    xe_Nb.append(x[i])
+                    ye_Nb.append(y[i])
+
+                if names[i]==E:
+                    Hole_Nb=Hole_Nb+1
+                    EH_Nb.append(Energy_Deposited[i])
+                    xH_Nb.append(x[i])
+                    yH_Nb.append(y[i])
 
 
 
@@ -179,6 +247,13 @@ print("The number of phononL is",L)
 print("G4CMPDriftElectron",Elec)
 print("G4CMPDriftHole",Hole)
 
+
+print("The number of phononTS in Nb",Ts_Nb)
+print("The number of phononTF in Nb",Tf_Nb)
+print("The number of phononL in Nb",L_Nb)
+print("G4CMPDriftElectron in Nb",Elec_Nb)
+print("G4CMPDriftHole in Nb",Hole_Nb)
+
 b_file.write(""+str(Ts))
 b_file.write("\t" +str(Tf))
 #b_file.write("\t" +str(Tf))
@@ -221,3 +296,39 @@ with open(Radial_posE, 'a') as f:
 with open(Radial_posH, 'a') as f:
      writer = csv.writer(f, delimiter='\t')
      writer.writerows(zip(xH,yH))
+
+
+#Nb paart
+
+
+zip(xTS_Nb,yTS_Nb)
+zip(xTF_Nb,yTF_Nb)
+zip(xL_Nb,yL_Nb)
+zip(xe_Nb,ye_Nb)
+zip(xH_Nb,yH_Nb)
+
+import csv
+with open(Radial_posTS_Nb, 'a') as f:
+     writer = csv.writer(f, delimiter='\t')
+     writer.writerows(zip(xTS_Nb,yTS_Nb))
+
+with open(Radial_posTF_Nb, 'a') as f:
+     writer = csv.writer(f, delimiter='\t')
+     writer.writerows(zip(xTF_Nb,yTF_Nb))
+
+with open(Radial_posTL_Nb, 'a') as f:
+     writer = csv.writer(f, delimiter='\t')
+     writer.writerows(zip(xL_Nb,yL_Nb))
+
+with open(Radial_posE_Nb, 'a') as f:
+     writer = csv.writer(f, delimiter='\t')
+     writer.writerows(zip(xe_Nb,ye_Nb))
+
+with open(Radial_posH_Nb, 'a') as f:
+     writer = csv.writer(f, delimiter='\t')
+     writer.writerows(zip(xH_Nb,yH_Nb))
+
+with open(Energy_Analysis, 'a') as f:
+     writer = csv.writer(f, delimiter='\t')
+     writer.writerows(zip(Start_Energy,Energy_Deposited))
+
